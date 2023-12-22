@@ -1,0 +1,19 @@
+{
+  "name": "sso-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx src/server1.ts & tsx src/server2.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@yangsansuan/h3": "^1.0.3",
+    "h3": "^1.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "tsx": "^4.7.0"
+  }
+}

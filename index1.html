@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>session用户状态：xxxxx</div>
+    <div id="api3000"></div>
+    <div id="api3001"></div>
+</body>
+<script>
+    
+    // testAPI()
+    // Initialize the agent at application startup.
+    import('https://openfpcdn.io/fingerprintjs/v4')
+        .then(FingerprintJS => FingerprintJS.load())
+        .then(fp => fp.get())
+        .then(async ({visitorId}) => {
+            console.log(visitorId)
+            // 登录时调用这个接口，存指纹
+            await setFigerprint(visitorId)
+            testAPI(visitorId)
+        })
+
+    function setFigerprint(fingerprint) {
+        fetch(`http://a.com:3000/setFigerprint?fingerprint=${fingerprint}`, {
+            method: 'POST'
+        }).finally(console.log)
+    }
+
+    function testAPI(fingerprint) {
+        fetch(`http://a.com:3000/api?fingerprint=${fingerprint}`)
+            .then(res => res.text())
+            .catch(err => err.message)
+            .then((txt) => {
+                document.getElementById('api3000').innerHTML = `a.com:3000/api运行结果：${txt}`
+            })
+
+        fetch(`http://b.com:3001/api?a=1&fingerprint=${fingerprint}`)
+            .then(res => res.text())
+            .catch(err => err.message)
+            .then((txt) => {
+                document.getElementById('api3001').innerHTML = `b.com:3001/api运行结果：${txt}`
+            })
+
+    }
+</script>
+</html>
