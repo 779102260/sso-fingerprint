@@ -19,7 +19,7 @@
         .then(fp => fp.get())
         .then(async ({visitorId}) => {
             console.log(visitorId)
-            // 登录时调用这个接口，存指纹
+            // 可以在登录时存指纹
             await setFigerprint(visitorId)
             testAPI(visitorId)
         })
