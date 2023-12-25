@@ -60,13 +60,13 @@ const setFigerprint = async (_fingerprint: string, user: string) => {
 export function listen(port: number): App {
     const router = createRouter()
         .get('/', async (event) => {
-            /** 用户 */
+            // -- 初始化参数 --
             let {user = '', fingerprint: _fingerprint} = getQuery(event)
 
-            /** 读取cookie sessionId */
+            // -- 读取cookie sessionId --
             let sessionId = getSessionIdFromCookie(event)
             
-            /** session无法验证用户时，尝试尝试从指纹中找到对应的用户，然后在找到sessionId */
+            // -- 通过指纹读取用户  --
             let isFoundByFingerprint = false
             if (!sessionId) {
                const res = await getFingerprint(_fingerprint)
@@ -77,9 +77,8 @@ export function listen(port: number): App {
                }
             }
 
-            /** 用户存在 */
             if (user) {
-                /** 未登录或者已过期 set-cookie sessionId */
+                // 未登录或者已过期 set-cookie sessionId 
                 if (!sessionId || !await getSession(user)) {
                     sessionId  = generateSessionId();
                     // 存储会话
@@ -95,7 +94,6 @@ export function listen(port: number): App {
         })
         /** 存储指纹 */
         .post('/setFigerprint', async (event) => {
-            /** 查找user */
             const {fingerprint: _fingerprint, user} = getQuery(event)
             if (_fingerprint && user) {
                 setFigerprint(_fingerprint, user)
@@ -103,15 +101,14 @@ export function listen(port: number): App {
             return 'ok'
         })
         .get('/api', async (event) => {
+            // -- 读取cookie sessionId --
             const {fingerprint: _fingerprint} = getQuery(event)
-            /** 读取cookie sessionId */
             let sessionId = getSessionIdFromCookie(event)
 
-            /** 允许跨域 */
+            // -- 允许跨域 --
             event.node.res.setHeader('Access-Control-Allow-Origin', '*');
-
-
-            /** 查找用户信息 */
+            
+            // -- 查找用户信息   --
             let user;
             let isFoundByFingerprint = false
             if  (!sessionId) {
@@ -124,7 +121,6 @@ export function listen(port: number): App {
             } else {
                 user = await getUserBySessionId(sessionId)
             }
-
 
             return {'用户': user || '', '携带的cookie': event.node.req.headers.cookie || '',  'sessionId': sessionId || '', 'fingerprint': _fingerprint || '', '是否通过fingerprint找到了用户': isFoundByFingerprint}
         })
