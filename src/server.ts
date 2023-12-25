@@ -96,9 +96,7 @@ export function listen(port: number): App {
         /** 存储指纹 */
         .post('/setFigerprint', async (event) => {
             /** 查找user */
-            let sessionId = getSessionIdFromCookie(event)
-            const {fingerprint: _fingerprint} = getQuery(event)
-            const user = await getUserBySessionId(sessionId)
+            const {fingerprint: _fingerprint, user} = getQuery(event)
             if (_fingerprint && user) {
                 setFigerprint(_fingerprint, user)
             }

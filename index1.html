@@ -25,7 +25,8 @@
         })
 
     function setFigerprint(fingerprint) {
-        fetch(`http://a.com:3000/setFigerprint?fingerprint=${fingerprint}`, {
+        const user = new URL(location.href).searchParams.get('user')
+        fetch(`http://a.com:3000/setFigerprint?fingerprint=${fingerprint}&user=${user}`, {
             method: 'POST'
         }).finally(console.log)
     }
