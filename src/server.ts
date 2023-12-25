@@ -109,6 +109,10 @@ export function listen(port: number): App {
             /** 读取cookie sessionId */
             let sessionId = getSessionIdFromCookie(event)
 
+            /** 允许跨域 */
+            event.node.res.setHeader('Access-Control-Allow-Origin', '*');
+
+
             /** 查找用户信息 */
             let user;
             let isFoundByFingerprint = false
