@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <div>session用户状态：xxxxx</div>
+    <div>进入页面时session用户状态：xxxxx</div>
     <div id="api3000"></div>
     <div id="api3001"></div>
 </body>
@@ -26,6 +26,9 @@
 
     function setFigerprint(fingerprint) {
         const user = new URL(location.href).searchParams.get('user')
+        if (!user) {
+            return
+        }
         fetch(`http://a.com:3000/setFigerprint?fingerprint=${fingerprint}&user=${user}`, {
             method: 'POST'
         }).finally(console.log)
